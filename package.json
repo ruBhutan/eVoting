@@ -1,0 +1,19 @@
+{
+  "name": "evoting_backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "dotenv": "^16.5.0",
+    "ethers": "^6.13.7",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
+}
