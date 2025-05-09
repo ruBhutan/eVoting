@@ -1,0 +1,98 @@
+openapi: 3.0.0
+info:
+  title: Voting API
+  version: 1.0.0
+  description: Secure voting system with blockchain integration
+
+servers:
+  - url: http://localhost:3001
+    description: Local server
+
+paths:
+  /auth/token:
+    post:
+      summary: Get access tokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                appId:
+                  type: string
+                appSecret:
+                  type: string
+      responses:
+        200:
+          description: Successfully authenticated
+        401:
+          description: Invalid credentials
+
+  
+
+  /api/vote:
+    post:
+      summary: Submit a vote
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                electionId:
+                  type: string
+                uid:
+                  type: string
+                candidate:
+                  type: string
+      responses:
+        200:
+          description: Vote successfully cast
+        401:
+          description: Unauthorized
+
+  /api/votesByElection:
+    get:
+      summary: Get vote counts
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: electionId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response
+        401:
+          description: Unauthorized
+
+#/auth/refresh:
+ #   post:
+  #    summary: Refresh access token
+   #   requestBody:
+    #    required: true
+     #   content:
+      #    application/json:
+       #     schema:
+        #      type: object
+         #     properties:
+          #      refreshToken:
+           #       type: string
+      #responses:
+       # 200:
+        #  description: New access token generated
+        #403:
+         # description: Invalid refresh token
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
