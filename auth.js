@@ -53,8 +53,6 @@ router.post('/token', authLimiter, (req, res) => {
   if (appId !== APP_ID || appSecret !== APP_SECRET) {
     return res.status(401).json({ error: 'Invalid credentials' });
   }
-console.log(`appId: ${appId}, appSecret: ${appSecret}`);
-console.log(`APP_ID: ${APP_ID}, APP_SECRET: ${APP_SECRET}`);
   const accessToken = generateAccessToken(appId);
   const refreshToken = generateRefreshToken(appId);
 

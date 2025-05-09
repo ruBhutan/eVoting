@@ -55,7 +55,7 @@ app.get('/', (req, res) => {
         <h1 class="text-3xl font-bold text-primary mb-6">E-Voting System API</h1>
         <p class="text-gray-700 mb-8">Welcome to the E-Voting System backend API</p>
         <a href="/api-docs" class="bg-primary hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-200 inline-block">
-          View API Documentation
+          View API & Documentation
         </a>
         <div class="mt-8 pt-6 border-t border-gray-200">
           <p class="text-sm text-gray-500">Powered by Express.js, Polygon POS  and Swagger UI</p>

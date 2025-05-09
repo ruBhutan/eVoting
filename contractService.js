@@ -23,17 +23,12 @@ function hashUid(uid) {
 // POST /vote
 router.post("/vote", authMiddleware, async (req, res) => {
   const { electionId, uid, candidate } = req.body;
-  console.log(electionId);
 
   try {
     const hashedUid = hashUid(uid);
     const tx = await contract.vote(electionId, hashedUid, candidate);
     await tx.wait();
     const receipt = await tx.wait();
-
-    console.log("Transaction hash:", tx.hash); // Log the transaction hash
-    console.log("Transaction status:", receipt.status); // Log the transaction status
-
     // Determine success or fail based on the status
     const txStatus = receipt.status === 1 ? "success" : "fail";
 
