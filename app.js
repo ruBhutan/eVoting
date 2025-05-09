@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import authRouter from './auth.js';
-import apiRouter from './index.js';
+import apiRouter from './contractService.js';
 import 'dotenv/config';
 const app = express();
 
