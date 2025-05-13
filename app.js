@@ -21,7 +21,7 @@ if (!fs.existsSync(logDirectory)) {
 const accessLogStream = fs.createWriteStream(path.join(logDirectory, 'access.log'), { flags: 'a' });
 
 const app = express();
-const swaggerDocument = YAML.load('./swaggerOne.yaml');
+const swaggerDocument = YAML.load('./swagger.yaml');
 
 app.use(cors());
 app.use(bodyParser.json());
