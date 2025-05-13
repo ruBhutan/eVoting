@@ -1,11 +1,11 @@
 {
   "name": "evoting_backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,8 +19,10 @@
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.0",
     "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
     "nodemon": "^3.1.10",
     "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0",
     "yamljs": "^0.3.0"
   }
 }

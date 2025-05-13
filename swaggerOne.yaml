@@ -1,0 +1,226 @@
+openapi: 3.0.0
+info:
+  title: Polygon E-Voting API
+  description: Secure API for managing and casting votes on the Polygon blockchain.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3001
+    description: Local server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    TokenRequest:
+      type: object
+      required:
+        - appId
+        - appSecret
+      properties:
+        appId:
+          type: string
+        appSecret:
+          type: string
+
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        refresh_token:
+          type: string
+        expires_in:
+          type: string
+
+    RefreshRequest:
+      type: object
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+
+    VoteRequest:
+      type: object
+      required:
+        - electionId
+        - uid
+        - candidate
+      properties:
+        electionId:
+          type: string
+        uid:
+          type: string
+        candidate:
+          type: string
+
+    VoteResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        txHash:
+          type: string
+        txStatus:
+          type: string
+        explorerLink:
+          type: string
+
+    VoteResult:
+      type: object
+      properties:
+        electionId:
+          type: string
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              candidate:
+                type: string
+              votes:
+                type: string
+
+paths:
+  /auth/token:
+    post:
+      summary: Get access and refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      responses:
+        '200':
+          description: Tokens issued successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Invalid credentials
+
+  /auth/refresh:
+    post:
+      summary: Refresh access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '403':
+          description: Invalid refresh token
+
+  /api/vote:
+    post:
+      summary: Cast a vote
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoteRequest'
+      responses:
+        '200':
+          description: Vote cast successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteResponse'
+        '400':
+          description: Already voted or bad request
+        '500':
+          description: Server error
+
+  /api/votesByElection:
+    get:
+      summary: Get vote counts for all candidates in an election
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: electionId
+          schema:
+            type: string
+          required: true
+          description: ID of the election
+      responses:
+        '200':
+          description: Vote counts fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoteResult'
+        '400':
+          description: Missing electionId
+        '500':
+          description: Server error
+
+  /api/getElectionsList:
+    get:
+      summary: Get list of all elections
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Election list fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  elections:
+                    type: array
+                    items:
+                      type: object
+        '500':
+          description: Server error
+
+  /api/votes:
+    get:
+      summary: Get vote count for a specific candidate
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: electionId
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: candidate
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Candidate vote count fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  candidate:
+                    type: string
+                  votes:
+                    type: string
+        '400':
+          description: Missing parameters
+        '500':
+          description: Server error

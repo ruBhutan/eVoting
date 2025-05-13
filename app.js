@@ -1,3 +1,4 @@
+// app.js
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -5,30 +6,31 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import authRouter from './auth.js';
 import apiRouter from './contractService.js';
+import { logger } from './logger.js';
+import { networkInterfaces } from 'os';
+import morgan from 'morgan';
+import path from 'path';
+import fs from 'fs';
 import 'dotenv/config';
+
+const logDirectory = path.resolve('logs');
+if (!fs.existsSync(logDirectory)) {
+  fs.mkdirSync(logDirectory);
+}
+
+const accessLogStream = fs.createWriteStream(path.join(logDirectory, 'access.log'), { flags: 'a' });
+
 const app = express();
+const swaggerDocument = YAML.load('./swaggerOne.yaml');
 
-// Load Swagger spec
-const swaggerDocument = YAML.load('./swagger.yaml');
-
-// Common middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(morgan('combined', { stream: accessLogStream }));
 
-// Routes
 app.use('/auth', authRouter);
 app.use('/api', apiRouter);
-
-// Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Internal Server Error' });
-});
-
-// Welcome page route
 app.get('/', (req, res) => {
   res.send(`
     <!DOCTYPE html>
@@ -58,7 +60,7 @@ app.get('/', (req, res) => {
           View API & Documentation
         </a>
         <div class="mt-8 pt-6 border-t border-gray-200">
-          <p class="text-sm text-gray-500">Powered by Express.js, Polygon POS  and Swagger UI</p>
+          <p class="text-sm text-gray-500">Powered by Express.js, Polygon POS and Swagger UI</p>
         </div>
       </div>
     </body>
@@ -66,8 +68,34 @@ app.get('/', (req, res) => {
   `);
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
-  console.log(`✅ Server running at http://localhost:${PORT}/api-docs`);
+// Error handler
+app.use((err, req, res, next) => {
+  logger.error(`${req.method} ${req.url} - ${err.message}`);
+  console.error(err.stack);
+  res.status(500).json({ error: 'Internal Server Error' });
 });
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, '0.0.0.0', () => {
+  const localUrl = `http://localhost:${PORT}/api-docs`;
+  const networkUrl = `http://${getLocalIpAddress()}:${PORT}/api-docs`;
+  console.log(`✅ Server accessible at:`);
+  console.log(`- Local: ${localUrl}`);
+  console.log(`- Network: ${networkUrl}`);
+  logger.info(`Server started at ${localUrl}`);
+  logger.info(`Server started at ${networkUrl}`);
+});
+
+function getLocalIpAddress() {
+  const interfaces = networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const interfaceInfo of interfaces[name]) {
+      if (interfaceInfo.family === 'IPv4' && !interfaceInfo.internal) {
+        return interfaceInfo.address;
+      }
+    }
+  }
+  return 'localhost';
+}
+
+
