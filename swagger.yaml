@@ -54,23 +54,6 @@ paths:
           description: Vote successfully cast
         401:
           description: Unauthorized
-
-  /api/votesByElection:
-    get:
-      summary: Get vote counts
-      security:
-        - bearerAuth: []
-      parameters:
-        - in: query
-          name: electionId
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Successful response
-        401:
-          description: Unauthorized
   /api/getElectionsList:
     get:
       summary: Get list of all elections
@@ -90,6 +73,23 @@ paths:
                       type: object
         '500':
           description: Server error
+          
+  /api/votesByElection:
+    get:
+      summary: Get vote counts
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: electionId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response
+        401:
+          description: Unauthorized
 #/auth/refresh:
  #   post:
   #    summary: Refresh access token
