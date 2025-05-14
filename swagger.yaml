@@ -71,7 +71,7 @@ paths:
           description: Successful response
         401:
           description: Unauthorized
-/api/getElectionsList:
+  /api/getElectionsList:
     get:
       summary: Get list of all elections
       security:
