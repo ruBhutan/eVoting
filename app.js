@@ -26,7 +26,11 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan('combined', { stream: accessLogStream }));
-
+app.use(cors({
+  origin: ['https://evoting-p0zm.onrender.com', 'http://localhost:3001'], // adjust as needed
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use('/auth', authRouter);
 app.use('/api', apiRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));

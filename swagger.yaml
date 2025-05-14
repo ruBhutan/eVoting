@@ -4,9 +4,10 @@ info:
   version: 1.0.0
   description: Secure voting system with blockchain integration
 
-servers:
-  - url: http://localhost:3001
-    description: Local server
+  servers: [
+      { url: 'https://evoting-p0zm.onrender.com' },
+      { url: 'http://localhost:3001' }, 
+    ]
 
 paths:
   /auth/token:
@@ -30,7 +31,6 @@ paths:
           description: Invalid credentials
 
   
-
   /api/vote:
     post:
       summary: Submit a vote
