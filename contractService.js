@@ -95,4 +95,21 @@ router.get("/votes", async (req, res) => {
   }
 });
 
+router.get("/checkVoted", async (req, res) => {
+  const { electionId, candidate } = req.query;
+
+  if (!electionId || !candidate) {
+    return res.status(400).send({ error: "Both electionId and candidate are required" });
+  }
+
+  try {
+    const votes = await contract.hasUserVoted(electionId, candidate);
+    console.log(votes);
+    res.send({ voted: votes.toString() });
+  } catch (err) {
+    logger.error(`Error fetching data: ${err.message}`);
+    res.status(500).send({ error: err.message });
+  }
+});
+
 export default router;
