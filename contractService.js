@@ -96,14 +96,14 @@ router.get("/votes", async (req, res) => {
 });
 
 router.get("/checkVoted", async (req, res) => {
-  const { electionId, candidate } = req.query;
+  const { electionId, uid } = req.query;
 
-  if (!electionId || !candidate) {
-    return res.status(400).send({ error: "Both electionId and candidate are required" });
+  if (!electionId || !uid) {
+    return res.status(400).send({ error: "Both electionId and VoterID are required" });
   }
 
   try {
-    const votes = await contract.hasUserVoted(electionId, candidate);
+    const votes = await contract.hasUserVoted(electionId, hashUid(uid));
     console.log(votes);
     res.send({ voted: votes.toString() });
   } catch (err) {
