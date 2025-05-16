@@ -50,7 +50,6 @@ router.post("/vote", async (req, res) => {
 
 router.get("/votesByElection", async (req, res) => {
   const { electionId } = req.query;
-
   if (!electionId) {
     return res.status(400).send({ error: "Missing electionId in query" });
   }
@@ -61,11 +60,10 @@ router.get("/votesByElection", async (req, res) => {
       candidate,
       votes: counts[index].toString(),
     }));
-
     res.send({ electionId, results });
   } catch (err) {
     logger.error(`Error fetching all vote counts: ${err.message}`);
-    res.status(500).send({ error: err.reason || err.message });
+    res.send({ "electionId": "Election ID does not exist", "results": []} );
   }
 });
 
