@@ -63,7 +63,7 @@ router.get("/votesByElection", async (req, res) => {
     res.send({ electionId, results });
   } catch (err) {
     logger.error(`Error fetching all vote counts: ${err.message}`);
-    res.status(400).send({ "electionId": "Election ID does not exist", "results": []} );
+    res.status(200).send({ "electionId": "Election ID does not exist", "results": []} );
   }
 });
 
