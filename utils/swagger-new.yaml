@@ -1,0 +1,361 @@
+openapi: 3.0.0
+info:
+  title: Smart Contract API - Online Voting System
+  description: API for interacting with an election smart contract on the blockchain
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001
+    description: Local development server
+  - url: https://evoting-p0zm.onrender.com
+    description: Cloud server
+
+
+paths:
+  /auth/token:
+    post:
+      tags:
+        - Authentication
+      description: Authenticate and get access tokens
+    
+      summary: Get access tokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                appId:
+                  type: string
+                appSecret:
+                  type: string
+      responses:
+        200:
+          description: Successfully authenticated
+        401:
+          description: Invalid credentials
+
+  /api/register:
+    post:
+      tags:
+        - Admin
+      summary: Register a candidate
+      description: Register a new candidate for an election (admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                electionId:
+                  type: string
+                  description: ID of the election
+                candidate:
+                  type: string
+                  description: Address or identifier of the candidate
+              required:
+                - electionId
+                - candidate
+      responses:
+        '200':
+          description: Candidate registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  txHash:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /api/remove:
+    delete:
+      tags:
+        - Admin
+      summary: Remove a candidate
+      description: Remove a candidate from an election (admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                electionId:
+                  type: string
+                  description: ID of the election
+                candidate:
+                  type: string
+                  description: Address or identifier of the candidate
+              required:
+                - electionId
+                - candidate
+      responses:
+        '200':
+          description: Candidate removed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  txHash:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /api/vote:
+    post:
+      tags:
+        - Voting
+      summary: Cast a vote
+      description: Cast a vote in an election
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                electionId:
+                  type: string
+                  description: ID of the election
+                uid:
+                  type: string
+                  description: Unique identifier of the voter
+                candidate:
+                  type: string
+                  description: Address or identifier of the candidate being voted for
+              required:
+                - electionId
+                - uid
+                - candidate
+      responses:
+        '200':
+          description: Vote cast successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  txHash:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /api/end:
+    post:
+      tags:
+        - Admin
+      summary: End an election
+      description: Mark an election as ended (admin only)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                electionId:
+                  type: string
+                  description: ID of the election to end
+              required:
+                - electionId
+      responses:
+        '200':
+          description: Election ended successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  txHash:
+                    type: string
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  /api/elections:
+    get:
+      tags:
+        - Election Info
+      summary: Get all elections
+      description: Retrieve information about all elections
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of elections retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  elections:
+                    type: array
+                    items:
+                      type: object
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  #/api/result/{electionId}:
+  #  get:
+  #    tags:
+  #      - Admin
+  #    summary: Get election results (admin only)
+  #    description: Retrieve detailed results of an election (admin only)
+  #   security:
+  #      - bearerAuth: []
+  #    parameters:
+  #      - name: electionId
+  #        in: path
+  #        required: true
+  #        schema:
+  #          type: string
+  #        description: ID of the election
+  #    responses:
+  #      '200':
+  #        description: Election results retrieved successfully
+  #        content:
+  #          application/json:
+  #            schema:
+  #              type: object
+  #              properties:
+  #                candidates:
+  #                  type: array
+  #                  items:
+  #                    type: string
+  #                votes:
+  #                  type: array
+  #                  items:
+  #                    type: integer
+  #                totalVotes:
+  #                  type: integer
+  #      '500':
+  #        description: Internal server error
+  #        content:
+  #          application/json:
+  #            schema:
+  #              type: object
+  #              properties:
+  #                error:
+  #                  type: string
+
+  /api/votesByElection:
+    get:
+      tags:
+        - Election Info
+      summary: Get vote counts
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: electionId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response
+        401:
+          description: Unauthorized
+
+  /api/checkVoted:
+    get:
+      tags:
+        - Voting
+      summary: Check if a user has voted
+      description: Check if a specific user has voted in an election
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: electionId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: ID of the election
+        - name: uid
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the voter
+      responses:
+        '200':
+          description: Vote status retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  voted:
+                    type: boolean
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

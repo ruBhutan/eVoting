@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "axios": "^1.9.0",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
@@ -20,9 +21,13 @@
     "express-rate-limit": "^7.5.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "nats": "^2.29.3",
+    "nats.ws": "^1.30.3",
     "nodemon": "^3.1.10",
     "swagger-ui-express": "^5.0.1",
     "winston": "^3.17.0",
+    "ws": "^8.18.2",
     "yamljs": "^0.3.0"
-  }
+  },
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
 }

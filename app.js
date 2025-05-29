@@ -4,9 +4,11 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
-import authRouter from './auth.js';
-import apiRouter from './contractService.js';
-import { logger } from './logger.js';
+import authRouter from './services/auth.js';
+import apiRouter from './services/contractService.js';
+import apiRouterNew from './services/new_contract.js';
+
+import { logger } from './utils/logger.js';
 import { networkInterfaces } from 'os';
 import morgan from 'morgan';
 import path from 'path';
@@ -21,18 +23,19 @@ if (!fs.existsSync(logDirectory)) {
 const accessLogStream = fs.createWriteStream(path.join(logDirectory, 'access.log'), { flags: 'a' });
 
 const app = express();
-const swaggerDocument = YAML.load('./swagger.yaml');
-
+//const swaggerDocument = YAML.load('./utils/swagger.yaml');
+const swaggerDocument = YAML.load('./utils/swagger-new.yaml')
 app.use(cors());
 app.use(bodyParser.json());
 app.use(morgan('combined', { stream: accessLogStream }));
 app.use(cors({
-  origin: ['https://evoting-p0zm.onrender.com', 'http://localhost:3001'], // adjust as needed
+  origin: ['https://evoting-p0zm.onrender.com', 'http://localhost:3001'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use('/auth', authRouter);
-app.use('/api', apiRouter);
+app.use('/api-old', apiRouter);
+app.use('/api', apiRouterNew);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', (req, res) => {
