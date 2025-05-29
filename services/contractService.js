@@ -4,9 +4,9 @@ import crypto from 'crypto';
 import { Router } from 'express';
 import { authMiddleware } from './auth.js';
 import fs from 'fs';
-import { logger } from './logger.js';
+import { logger } from '../utils/logger.js';
 
-const abi = JSON.parse(fs.readFileSync('./abi.json', 'utf-8'));
+const abi = JSON.parse(fs.readFileSync('./abi/abi.json', 'utf-8'));
 const router = Router();
 router.use(authMiddleware);
 
@@ -60,6 +60,7 @@ router.get("/votesByElection", async (req, res) => {
       candidate,
       votes: counts[index].toString(),
     }));
+    console.log(results);
     res.send({ electionId, results });
   } catch (err) {
     logger.error(`Error fetching all vote counts: ${err.message}`);

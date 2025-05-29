@@ -2,7 +2,7 @@ import { Router } from 'express';
 import jwt from 'jsonwebtoken';
 import rateLimit from 'express-rate-limit';
 import 'dotenv/config';
-import { logger } from './logger.js';
+import { logger } from '../utils/logger.js';
 
 const router = Router();
 
