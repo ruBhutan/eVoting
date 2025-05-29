@@ -30,8 +30,12 @@ router.post("/register", async (req, res) => {
     logger.info(`Candidate registered: ${JSON.stringify(candidate)}, txHash: ${tx.hash}`);
     res.json({ message: "Candidate registered", txHash: tx.hash });
   } catch (err) {
-    logger.error(`Error registering candidate: ${err.message}`);
-    res.status(400).json({ error: err.message });
+    if (err.message.includes("Candidate already registered")) {
+      logger.warn(`Candidate already registered: ${JSON.stringify(candidate)}`);
+      return res.status(400).json({ message: "Candidate Already Registered" });
+    }
+    logger.error(`Error registering candidate: ${err.message}`); 
+    
   }
 });
 
