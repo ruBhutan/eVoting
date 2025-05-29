@@ -55,7 +55,6 @@ router.post('/token', (req, res) => {
   logger.info('Access token issued successfully');
   res.json({
     access_token: accessToken,
-    refresh_token: refreshToken,
     expires_in: ACCESS_TOKEN_EXPIRES_IN
   });
 });

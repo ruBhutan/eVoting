@@ -34,7 +34,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use('/auth', authRouter);
-app.use('/api-0ld', apiRouter);
+app.use('/api-old', apiRouter);
 app.use('/api', apiRouterNew);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

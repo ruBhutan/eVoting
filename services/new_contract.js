@@ -31,7 +31,7 @@ router.post("/register", async (req, res) => {
     res.json({ message: "Candidate registered", txHash: tx.hash });
   } catch (err) {
     logger.error(`Error registering candidate: ${err.message}`);
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
@@ -45,7 +45,7 @@ router.delete("/remove", async (req, res) => {
     res.json({ message: "Candidate removed", txHash: tx.hash });
   } catch (err) {
     logger.error(`Error removing candidate: ${err.message}`);
-    res.status(500).json({ error: err.message });
+    res.status(400).json({ error: err.message });
   }
 });
 
