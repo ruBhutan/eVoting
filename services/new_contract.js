@@ -13,9 +13,8 @@ router.use(authMiddleware);
 const provider = new JsonRpcProvider(process.env.AMOY_RPC_URL);
 const wallet = new Wallet(process.env.PRIVATE_KEY, provider);
 //const contractAddress = process.env.CONTRACT_ADDRESS;
-const contractAddress = '0x82F0c6CEae998930DdB5C21da7D7B44E6786B5D5';
+const contractAddress = '0xd62c6E1BE08d22598CBB4330e5C349bebe6f1d93';
 const contract = new Contract(contractAddress, abi, wallet);
-
 function hashUid(uid) {
   const secretUid = process.env.SECRET_PHRASE + uid;
   return crypto.createHash("sha256").update(secretUid).digest("hex");
