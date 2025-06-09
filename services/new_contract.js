@@ -19,7 +19,6 @@ function hashUid(uid) {
   const secretUid = process.env.SECRET_PHRASE + uid;
   return crypto.createHash("sha256").update(secretUid).digest("hex");
 }
-
 // Register a candidate
 router.post("/register", async (req, res) => {
   const { electionId, candidate } = req.body;
@@ -34,7 +33,7 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "Candidate Already Registered" });
     }
     logger.error(`Error registering candidate: ${err.message}`); 
-    
+   
   }
 });
 
