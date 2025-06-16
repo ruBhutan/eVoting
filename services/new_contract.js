@@ -12,8 +12,7 @@ router.use(authMiddleware);
 
 const provider = new JsonRpcProvider(process.env.AMOY_RPC_URL);
 const wallet = new Wallet(process.env.PRIVATE_KEY, provider);
-//const contractAddress = process.env.CONTRACT_ADDRESS;
-const contractAddress = '0x68E69e8A33abcEe390194ca85a877d3ebe30CAF0';
+const contractAddress = process.env.CONTRACT_ADDRESS;
 
 const contract = new Contract(contractAddress, abi, wallet);
 function hashUid(uid) {
@@ -34,7 +33,6 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "Candidate Already Registered" });
     }
     logger.error(`Error registering candidate: ${err.message}`); 
-   
   }
 });
 
@@ -125,22 +123,20 @@ router.get("/votesByElection", async (req, res) => {
     res.json({ result: results, totalVotes: totalVotes.toString() });
   } catch (err) {
     logger.error(`Error fetching all vote counts: ${err.message}`);
-    res.status(400).json({ 
+    res.status(400).json({
       error: "Election ID does not exist",
       electionId,
-      results: [] 
+      results: []
     });
   }
 });
 
 
-  
 
 router.get("/votesByElection1", async (req, res) => {
   const { electionId } = req.params;
 
   try {
-   
     const [candidates, counts, totalVotes] = await contract.getCandidateVotesAndTotalElectionVotesPublic(electionId);
     const results = candidates.map((candidate, index) => ({
       candidate,
