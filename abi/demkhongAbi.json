@@ -1,0 +1,314 @@
+{
+    "abi": [
+        {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "string",
+                    "name": "candidate",
+                    "type": "string"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "string",
+                    "name": "demkhong",
+                    "type": "string"
+                }
+            ],
+            "name": "CandidateRegistered",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "string",
+                    "name": "candidate",
+                    "type": "string"
+                }
+            ],
+            "name": "CandidateRemoved",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                }
+            ],
+            "name": "ElectionEnded",
+            "type": "event"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": true,
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                },
+                {
+                    "indexed": true,
+                    "internalType": "string",
+                    "name": "uid",
+                    "type": "string"
+                }
+            ],
+            "name": "VoteCast",
+            "type": "event"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                }
+            ],
+            "name": "endElection",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getAllElections",
+            "outputs": [
+                {
+                    "internalType": "string[]",
+                    "name": "",
+                    "type": "string[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                }
+            ],
+            "name": "getCandidateVotesAndTotalElectionVotes",
+            "outputs": [
+                {
+                    "internalType": "string[]",
+                    "name": "candidates",
+                    "type": "string[]"
+                },
+                {
+                    "internalType": "string[]",
+                    "name": "demkhongs",
+                    "type": "string[]"
+                },
+                {
+                    "internalType": "uint256[]",
+                    "name": "candidateVotes",
+                    "type": "uint256[]"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "totalVotes",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "totalMale",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "totalFemale",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                }
+            ],
+            "name": "getDemkhongResults",
+            "outputs": [
+                {
+                    "internalType": "string[]",
+                    "name": "demkhongs",
+                    "type": "string[]"
+                },
+                {
+                    "internalType": "uint256[]",
+                    "name": "totalVotesByDemkhong",
+                    "type": "uint256[]"
+                },
+                {
+                    "internalType": "uint256[]",
+                    "name": "maleByDemkhong",
+                    "type": "uint256[]"
+                },
+                {
+                    "internalType": "uint256[]",
+                    "name": "femaleByDemkhong",
+                    "type": "uint256[]"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "uid",
+                    "type": "string"
+                }
+            ],
+            "name": "hasUserVoted",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                }
+            ],
+            "name": "isElectionEnded",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "owner",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "candidate",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "demkhong",
+                    "type": "string"
+                }
+            ],
+            "name": "registerCandidate",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "candidate",
+                    "type": "string"
+                }
+            ],
+            "name": "removeCandidate",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "electionId",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "uid",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "candidate",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "genderStr",
+                    "type": "string"
+                }
+            ],
+            "name": "vote",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ]
+}
