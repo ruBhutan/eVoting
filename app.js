@@ -1,19 +1,18 @@
 // app.js
-import express from 'express';
-import cors from 'cors';
 import bodyParser from 'body-parser';
+import cors from 'cors';
+import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
 import authRouter from './services/auth.js';
-import apiRouter from './services/contractService.js';
-import apiRouterNew from './services/new_contract.js';
+import apiRouterNew from './services/demkhongAddedService.js';
 
-import { logger } from './utils/logger.js';
-import { networkInterfaces } from 'os';
-import morgan from 'morgan';
-import path from 'path';
-import fs from 'fs';
 import 'dotenv/config';
+import fs from 'fs';
+import morgan from 'morgan';
+import { networkInterfaces } from 'os';
+import path from 'path';
+import { logger } from './utils/logger.js';
 
 const logDirectory = path.resolve('logs');
 if (!fs.existsSync(logDirectory)) {
@@ -34,7 +33,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use('/auth', authRouter);
-app.use('/api-old', apiRouter);
 app.use('/api', apiRouterNew);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

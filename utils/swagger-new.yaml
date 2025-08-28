@@ -9,14 +9,13 @@ servers:
   - url: https://evoting-p0zm.onrender.com
     description: Cloud server
 
-
 paths:
   /auth/token:
     post:
       tags:
         - Authentication
       description: Authenticate and get access tokens
-    
+
       summary: Get access tokens
       requestBody:
         required: true
@@ -56,11 +55,15 @@ paths:
                 candidate:
                   type: string
                   description: Address or identifier of the candidate
+                demkhong:
+                  type: string
+                  description: Demkhong of the candidate
               required:
                 - electionId
                 - candidate
+                - demkhong
       responses:
-        '200':
+        "200":
           description: Candidate registered successfully
           content:
             application/json:
@@ -71,7 +74,7 @@ paths:
                     type: string
                   txHash:
                     type: string
-        '500':
+        "500":
           description: Internal server error
           content:
             application/json:
@@ -106,7 +109,7 @@ paths:
                 - electionId
                 - candidate
       responses:
-        '200':
+        "200":
           description: Candidate removed successfully
           content:
             application/json:
@@ -117,7 +120,7 @@ paths:
                     type: string
                   txHash:
                     type: string
-        '500':
+        "500":
           description: Internal server error
           content:
             application/json:
@@ -151,12 +154,16 @@ paths:
                 candidate:
                   type: string
                   description: Address or identifier of the candidate being voted for
+                gender:
+                  type: string
+                  description: Gender of the voter
               required:
                 - electionId
                 - uid
                 - candidate
+                - gender
       responses:
-        '200':
+        "200":
           description: Vote cast successfully
           content:
             application/json:
@@ -167,7 +174,7 @@ paths:
                     type: string
                   txHash:
                     type: string
-        '500':
+        "500":
           description: Internal server error
           content:
             application/json:
@@ -198,7 +205,7 @@ paths:
               required:
                 - electionId
       responses:
-        '200':
+        "200":
           description: Election ended successfully
           content:
             application/json:
@@ -209,7 +216,7 @@ paths:
                     type: string
                   txHash:
                     type: string
-        '500':
+        "500":
           description: Internal server error
           content:
             application/json:
@@ -228,7 +235,7 @@ paths:
       security:
         - bearerAuth: []
       responses:
-        '200':
+        "200":
           description: List of elections retrieved successfully
           content:
             application/json:
@@ -239,7 +246,7 @@ paths:
                     type: array
                     items:
                       type: object
-        '500':
+        "500":
           description: Internal server error
           content:
             application/json:
@@ -249,54 +256,11 @@ paths:
                   error:
                     type: string
 
-  #/api/result/{electionId}:
-  #  get:
-  #    tags:
-  #      - Admin
-  #    summary: Get election results (admin only)
-  #    description: Retrieve detailed results of an election (admin only)
-  #   security:
-  #      - bearerAuth: []
-  #    parameters:
-  #      - name: electionId
-  #        in: path
-  #        required: true
-  #        schema:
-  #          type: string
-  #        description: ID of the election
-  #    responses:
-  #      '200':
-  #        description: Election results retrieved successfully
-  #        content:
-  #          application/json:
-  #            schema:
-  #              type: object
-  #              properties:
-  #                candidates:
-  #                  type: array
-  #                  items:
-  #                    type: string
-  #                votes:
-  #                  type: array
-  #                  items:
-  #                    type: integer
-  #                totalVotes:
-  #                  type: integer
-  #      '500':
-  #        description: Internal server error
-  #        content:
-  #          application/json:
-  #            schema:
-  #              type: object
-  #              properties:
-  #                error:
-  #                  type: string
-
   /api/votesByElection:
     get:
       tags:
         - Election Info
-      summary: Get vote counts
+      summary: Get vote counts for an election
       security:
         - bearerAuth: []
       parameters:
@@ -308,8 +272,108 @@ paths:
       responses:
         200:
           description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        candidate:
+                          type: string
+                        demkhong:
+                          type: string
+                        votes:
+                          type: string
+                  totalVotes:
+                    type: string
+                  totalMale:
+                    type: string
+                  totalFemale:
+                    type: string
         401:
           description: Unauthorized
+
+  /api/demkhongResults:
+    get:
+      tags:
+        - Election Info
+      summary: Get constituency (demkhong) results
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: electionId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        demkhong:
+                          type: string
+                        totalVotes:
+                          type: string
+                        maleVotes:
+                          type: string
+                        femaleVotes:
+                          type: string
+        401:
+          description: Unauthorized
+
+  /api/public-result/{electionId}:
+    get:
+      tags:
+        - Election Info
+      summary: Get public results for an election
+      parameters:
+        - in: path
+          name: electionId
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        candidate:
+                          type: string
+                        demkhong:
+                          type: string
+                        votes:
+                          type: string
+                  totalVotes:
+                    type: string
+                  totalMale:
+                    type: string
+                  totalFemale:
+                    type: string
+        403:
+          description: Election is not yet ended.
+        404:
+          description: Election does not exist
 
   /api/checkVoted:
     get:
@@ -333,7 +397,7 @@ paths:
             type: string
           description: Unique identifier of the voter
       responses:
-        '200':
+        "200":
           description: Vote status retrieved successfully
           content:
             application/json:
@@ -342,7 +406,7 @@ paths:
                 properties:
                   voted:
                     type: boolean
-        '500':
+        "500":
           description: Internal server error
           content:
             application/json:
@@ -351,7 +415,6 @@ paths:
                 properties:
                   error:
                     type: string
-
 
 components:
   securitySchemes:

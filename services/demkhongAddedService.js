@@ -1,12 +1,12 @@
-import { JsonRpcProvider, Wallet, Contract } from 'ethers';
-import 'dotenv/config';
 import crypto from 'crypto';
+import 'dotenv/config';
+import { Contract, JsonRpcProvider, Wallet } from 'ethers';
 import { Router } from 'express';
-import { authMiddleware } from './auth.js';
 import fs from 'fs';
 import { logger } from '../utils/logger.js';
+import { authMiddleware } from './auth.js';
 
-const abi = JSON.parse(fs.readFileSync('./abi/new_contract_abi.json', 'utf-8'));
+const abi = JSON.parse(fs.readFileSync('./abi/demkhongAbi.json', 'utf-8'));
 const router = Router();
 router.use(authMiddleware);
 
